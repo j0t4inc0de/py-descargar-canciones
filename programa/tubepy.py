@@ -1,4 +1,4 @@
-from tkinter import END, ttk
+from tkinter import END, messagebox, ttk
 from ttkthemes import ThemedTk
 import pytube
 from pytube import YouTube
@@ -34,6 +34,7 @@ class App:
         clip = AudioFileClip(download_path)
         clip.write_audiofile("mp3/"+nombre+".mp3")
         clip.close()
+        messagebox.showinfo("Tubepy", "Descarga completada")
         self.limpiar()
     def limpiar(self):
         self.link.delete(0, END)
