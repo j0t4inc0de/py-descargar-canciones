@@ -33,6 +33,3 @@ class App:
     
     def limpiar(self):
         self.link.delete(0, END)
-        
-if __name__ == '__main__':
-    run = App()
