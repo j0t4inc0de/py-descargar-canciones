@@ -1,4 +1,4 @@
-from tkinter import ttk
+from tkinter import END, ttk
 from ttkthemes import ThemedTk
 import pytube
 from pytube import YouTube
