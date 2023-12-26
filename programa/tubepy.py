@@ -1,11 +1,12 @@
-from tkinter import *
+from tkinter import ttk
+from ttkthemes import ThemedTk
 import pytube
 from pytube import YouTube
 from moviepy.editor import AudioFileClip
 # Programa tkinter para descargat en .mp3 canciones de youtube
 class App:
     def __init__(self):
-        self.ventana = Tk()
+        self.ventana = ThemedTk(theme="plastik")
         self.ventana.title("Tubepy echo por Jota")
         self.ventana.geometry("500x150")
         self.ventana.resizable(False, False)
@@ -13,15 +14,15 @@ class App:
         self.ventana.mainloop()
 
     def formulario(self):
-        self.label2 = Label(self.ventana, text="Tubepy echo por Jota").pack()
+        self.label2 = ttk.Label(self.ventana, text="Tubepy echo por Jota").pack()
 
-        self.separador = Label(self.ventana, text="").pack()
+        self.separador = ttk.Label(self.ventana, text="").pack()
 
-        self.label = Label(self.ventana, text="Url de la cancion: ").pack()
-        self.link = Entry(self.ventana, width=50)
+        self.label = ttk.Label(self.ventana, text="Url de la cancion: ").pack()
+        self.link = ttk.Entry(self.ventana, width=50)
         self.link.pack()
-        self.boton = Button(self.ventana, text="Descargar", command=self.descargar).place(x=100, y=90)
-        self.btnLimpiar = Button(self.ventana, text="Limpiar", command=self.limpiar).place(x=170, y=90)
+        self.boton = ttk.Button(self.ventana, text="Descargar", command=self.descargar).place(x=100, y=90)
+        self.btnLimpiar = ttk.Button(self.ventana, text="Limpiar", command=self.limpiar).place(x=180, y=90)
     def descargar(self):
         url = self.link.get()
         video = YouTube(url)
