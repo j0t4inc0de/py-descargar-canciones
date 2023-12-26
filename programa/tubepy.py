@@ -12,10 +12,9 @@ class App:
         self.ventana.resizable(False, False)
         self.formulario()
         self.ventana.mainloop()
-
     def formulario(self):
+        print("Programa Tubepy iniciado!\t")
         self.label2 = ttk.Label(self.ventana, text="Tubepy echo por Jota").pack()
-
         self.separador = ttk.Label(self.ventana, text="").pack()
 
         self.label = ttk.Label(self.ventana, text="Url de la cancion: ").pack()
@@ -29,12 +28,13 @@ class App:
         audio = video.streams.filter(only_audio=True).first()
         download_path = audio.download(output_path="mp4")
         nombre = video.title.replace(" ", "_")
-
+        print("Descargando: "+nombre)
         # Convertir el archivo descargado a .mp3
         clip = AudioFileClip(download_path)
         clip.write_audiofile("mp3/"+nombre+".mp3")
         clip.close()
         messagebox.showinfo("Tubepy", "Descarga completada")
         self.limpiar()
+        print("Recuerda que cada canción se descarga en .mp3/.mp4 en sus respectivas carpetas.\nPrograma Tubepy finalizado!\nEcho por Jota.")
     def limpiar(self):
         self.link.delete(0, END)
