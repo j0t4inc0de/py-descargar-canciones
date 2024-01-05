@@ -25,16 +25,31 @@ class App:
     def descargar(self):
         url = self.link.get()
         video = YouTube(url)
-        audio = video.streams.filter(only_audio=True).first()
-        download_path = audio.download(output_path="mp4")
-        nombre = video.title.replace(" ", "_")
-        print("Descargando: "+nombre)
-        # Convertir el archivo descargado a .mp3
-        clip = AudioFileClip(download_path)
-        clip.write_audiofile("mp3/"+nombre+".mp3")
-        clip.close()
-        messagebox.showinfo("Tubepy", "Descarga completada")
-        self.limpiar()
-        print("Recuerda que cada canción se descarga en .mp3/.mp4 en sus respectivas carpetas.\nPrograma Tubepy finalizado!\nEcho por Jota.")
+        # Proceso de validacion de la url
+        if self.validarUrl(url) == True: 
+            audio = video.streams.filter(only_audio=True).first()
+            download_path = audio.download(output_path="mp4")
+            nombre = video.title.replace(" ", "_")
+            print("Descargando: "+nombre)
+            # Convertir el archivo descargado a .mp3
+            clip = AudioFileClip(download_path)
+            clip.write_audiofile("mp3/"+nombre+".mp3")
+            clip.close()
+            messagebox.showinfo("Tubepy", "Descarga completada")
+            self.limpiar()
+            print("Recuerda que cada canción se descarga en .mp3/.mp4 en sus respectivas carpetas.\nPrograma Tubepy finalizado!\nEcho por Jota.")
+        if self.validarUrl(url) == False:
+            messagebox.showerror("Tubepy", "Url invalida")
+            self.limpiar()
+    def validarUrl(self, url):
+        import validators
+        caracter = "https://www.youtube.com/watch?v="
+        if validators.url(url) == True:
+            print("Url valida")
+            return True
+        else:
+            print("Url invalida")
+            return False
+
     def limpiar(self):
         self.link.delete(0, END)
