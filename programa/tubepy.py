@@ -41,6 +41,7 @@ class App:
             self.limpiar()
             print("Recuerda que cada canción se descarga en .mp3/.mp4 en sus respectivas carpetas.\nPrograma Tubepy finalizado!\nEcho por Jota.")
         else:
+            print("Url invalida: Verifica que la url sea correcta y no este mal escrita")
             messagebox.showerror("Tubepy", "Url invalida")
     def validarUrl(self, url):
         import validators
