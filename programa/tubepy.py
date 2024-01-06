@@ -24,12 +24,12 @@ class App:
         self.btnLimpiar = ttk.Button(self.ventana, text="Limpiar", command=self.limpiar).place(x=180, y=90)
     def descargar(self):
         url = self.link.get()
-        video = YouTube(url)
         # Proceso de validacion de la url
         if self.validarUrl(url) == True: 
+            video = YouTube(url)
             audio = video.streams.filter(only_audio=True).first()
             download_path = audio.download(output_path="mp4")
-            nombre = video.title.replace(" ", "_")
+            nombre = video.title.replace(" ", "_").replace("|", "")
             print("Descargando: "+nombre)
             # Convertir el archivo descargado a .mp3
             clip = AudioFileClip(download_path)
@@ -38,18 +38,15 @@ class App:
             messagebox.showinfo("Tubepy", "Descarga completada")
             self.limpiar()
             print("Recuerda que cada canción se descarga en .mp3/.mp4 en sus respectivas carpetas.\nPrograma Tubepy finalizado!\nEcho por Jota.")
-        if self.validarUrl(url) == False:
+        else:
             messagebox.showerror("Tubepy", "Url invalida")
-            self.limpiar()
     def validarUrl(self, url):
         import validators
-        caracter = "https://www.youtube.com/watch?v="
         if validators.url(url) == True:
             print("Url valida")
             return True
         else:
             print("Url invalida")
             return False
-
     def limpiar(self):
         self.link.delete(0, END)
