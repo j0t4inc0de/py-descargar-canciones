@@ -17,11 +17,12 @@ class App:
         self.label2 = ttk.Label(self.ventana, text="Tubepy echo por Jota").pack()
         self.separador = ttk.Label(self.ventana, text="").pack()
 
-        self.label = ttk.Label(self.ventana, text="Url de la cancion: ").pack()
+        self.label = ttk.Label(self.ventana, text="Url del video: ").pack()
         self.link = ttk.Entry(self.ventana, width=50)
         self.link.pack()
         self.boton = ttk.Button(self.ventana, text="Descargar", command=self.descargar).place(x=100, y=90)
         self.btnLimpiar = ttk.Button(self.ventana, text="Limpiar", command=self.limpiar).place(x=180, y=90)
+        self.btnInstrucciones = ttk.Button(self.ventana, text="Instrucciones", command=self.verInstrucciones).place(x=260, y=90)
     def descargar(self):
         url = self.link.get()
         # Proceso de validacion de la url
@@ -29,7 +30,7 @@ class App:
             video = YouTube(url)
             audio = video.streams.filter(only_audio=True).first()
             download_path = audio.download(output_path="mp4")
-            nombre = video.title.replace(" ", "_").replace("|", "")
+            nombre = video.title.replace(" ", "_").replace("|", "").replace("?","").replace("¿","").replace("¡","").replace("!","").replace("(","").replace(")","").replace("á","a").replace("é","e").replace("í","i").replace("ó","o").replace("ú","u")
             print("Descargando: "+nombre)
             # Convertir el archivo descargado a .mp3
             clip = AudioFileClip(download_path)
@@ -48,5 +49,14 @@ class App:
         else:
             print("Url invalida")
             return False
+    def verInstrucciones(self):
+        print('''Instrucciones:
+              1. Copia la url/link de la cancion de youtube que quieres descargar
+              2. Pegala en el campo de texto
+              3. Dale al boton de descargar
+              4. Espera a que se descargue el audio del video
+              5. Busca el archivo en la carpeta mp3 o mp4
+              6. Disfruta del audio :)
+              ''')
     def limpiar(self):
         self.link.delete(0, END)
