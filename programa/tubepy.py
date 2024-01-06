@@ -9,6 +9,7 @@ class App:
         self.ventana = ThemedTk(theme="plastik")
         self.ventana.title("Tubepy echo por Jota")
         self.ventana.geometry("500x150")
+        self.ventana.iconbitmap("icono.ico")
         self.ventana.resizable(False, False)
         self.formulario()
         self.ventana.mainloop()
