@@ -44,13 +44,7 @@ class App:
             print("Url invalida: Verifica que la url sea correcta y no este mal escrita")
             messagebox.showerror("Tubepy", "Url invalida")
     def validarUrl(self, url):
-        import validators
-        if validators.url(url) == True:
-            print("Url valida")
-            return True
-        else:
-            print("Url invalida")
-            return False
+        return True
     def verInstrucciones(self):
         print('''Instrucciones:
               1. Copia la url/link de la cancion de youtube que quieres descargar
