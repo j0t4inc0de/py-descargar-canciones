@@ -1,58 +1,75 @@
-from tkinter import END, messagebox, ttk
-from ttkthemes import ThemedTk
-import pytube
-from pytube import YouTube
-from moviepy.editor import AudioFileClip
-# Programa tkinter para descargat en .mp3 canciones de youtube
-class App:
-    def __init__(self):
-        self.ventana = ThemedTk(theme="plastik")
-        self.ventana.title("Tubepy echo por Jota")
-        self.ventana.geometry("500x150")
-        self.ventana.iconbitmap("icono.ico")
-        self.ventana.resizable(False, False)
-        self.formulario()
-        self.ventana.mainloop()
-    def formulario(self):
-        print("Programa Tubepy iniciado!\t")
-        self.label2 = ttk.Label(self.ventana, text="Tubepy echo por Jota").pack()
-        self.separador = ttk.Label(self.ventana, text="").pack()
+import tkinter as tk
+from tkinter import ttk, messagebox
+import threading
+import os
+from yt_dlp import YoutubeDL
 
-        self.label = ttk.Label(self.ventana, text="Url del video: ").pack()
-        self.link = ttk.Entry(self.ventana, width=50)
-        self.link.pack()
-        self.boton = ttk.Button(self.ventana, text="Descargar", command=self.descargar).place(x=100, y=90)
-        self.btnLimpiar = ttk.Button(self.ventana, text="Limpiar", command=self.limpiar).place(x=180, y=90)
-        self.btnInstrucciones = ttk.Button(self.ventana, text="Instrucciones", command=self.verInstrucciones).place(x=260, y=90)
-    def descargar(self):
-        url = self.link.get()
-        # Proceso de validacion de la url
-        if self.validarUrl(url) == True: 
-            video = YouTube(url)
-            audio = video.streams.filter(only_audio=True).first()
-            download_path = audio.download(output_path="mp4")
-            nombre = video.title.replace(" ", "_").replace("|", "").replace("?","").replace("¿","").replace("¡","").replace("!","").replace("(","").replace(")","").replace("á","a").replace("é","e").replace("í","i").replace("ó","o").replace("ú","u")
-            print("Descargando: "+nombre)
-            # Convertir el archivo descargado a .mp3
-            clip = AudioFileClip(download_path)
-            clip.write_audiofile("mp3/"+nombre+".mp3")
-            clip.close()
-            messagebox.showinfo("Tubepy", "Descarga completada")
-            self.limpiar()
-            print("Recuerda que cada canción se descarga en .mp3/.mp4 en sus respectivas carpetas.\nPrograma Tubepy finalizado!\nEcho por Jota.")
-        else:
-            print("Url invalida: Verifica que la url sea correcta y no este mal escrita")
-            messagebox.showerror("Tubepy", "Url invalida")
-    def validarUrl(self, url):
-        return True
-    def verInstrucciones(self):
-        print('''Instrucciones:
-              1. Copia la url/link de la cancion de youtube que quieres descargar
-              2. Pegala en el campo de texto
-              3. Dale al boton de descargar
-              4. Espera a que se descargue el audio del video
-              5. Busca el archivo en la carpeta mp3 o mp4
-              6. Disfruta del audio :)
-              ''')
-    def limpiar(self):
-        self.link.delete(0, END)
+class TubePyApp:
+    def __init__(self):
+        self.window = tk.Tk()
+        self.window.title("TubePy MP3 Downloader")
+        self.window.geometry("500x150")
+        
+        # Configurar interfaz
+        self.create_widgets()
+        self.check_directories()
+        
+    def check_directories(self):
+        os.makedirs("mp3", exist_ok=True)
+        
+    def create_widgets(self):
+        # Entrada de URL
+        ttk.Label(self.window, text="URL de YouTube:").pack(pady=5)
+        self.url_entry = ttk.Entry(self.window, width=50)
+        self.url_entry.pack(pady=5)
+        
+        # Botones
+        btn_frame = ttk.Frame(self.window)
+        btn_frame.pack(pady=10)
+        
+        ttk.Button(
+            btn_frame, 
+            text="Descargar", 
+            command=self.start_download
+        ).pack(side="left", padx=5)
+        
+        ttk.Button(
+            btn_frame, 
+            text="Limpiar", 
+            command=self.clear_input
+        ).pack(side="left", padx=5)
+        
+    def start_download(self):
+        url = self.url_entry.get().strip()
+        if not url:
+            messagebox.showerror("Error", "Ingresa una URL válida")
+            return
+            
+        threading.Thread(
+            target=self.download_audio, 
+            args=(url,), 
+            daemon=True
+        ).start()
+        
+    def download_audio(self, url):
+        try:
+            ydl_opts = {
+                'format': 'bestaudio[ext=m4a]',
+                'outtmpl': os.path.join("mp3", '%(title)s.%(ext)s'),
+                'noplaylist': True,
+            }
+            
+            with YoutubeDL(ydl_opts) as ydl:
+                ydl.download([url])
+                
+            messagebox.showinfo("Éxito", "Descarga completada")
+            
+        except Exception as e:
+            messagebox.showerror("Error", f"Error: {str(e)}")
+            
+    def clear_input(self):
+        self.url_entry.delete(0, tk.END)
+
+if __name__ == "__main__":
+    app = TubePyApp()
+    app.window.mainloop()
