@@ -1,3 +1,4 @@
-from programa.tubepy import TubePyApp as App       
-if __name__ == '__main__':
-    run = App()
+from programa.tubepy import TubePyApp     
+if __name__ == "__main__":
+    app = TubePyApp()
+    app.window.mainloop()
